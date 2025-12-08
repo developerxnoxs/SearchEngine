@@ -13,6 +13,8 @@ Library Python yang powerful untuk melakukan pencarian di berbagai mesin pencari
 
 - **6 Mesin Pencari**: Google, Bing, DuckDuckGo, Yahoo, Mojeek, Brave
 - **Interface Seragam**: API yang sama untuk semua mesin pencari
+- **Pencarian 1 Baris**: `quick_search()` untuk kemudahan penggunaan
+- **Visit URL**: Ambil konten halaman dari hasil pencarian
 - **Caching**: Cache berbasis file dan memory
 - **Rate Limiting**: Rate limiter bawaan dengan exponential backoff
 - **Dukungan Proxy**: Bekerja dengan proxy kustom dan ScraperAPI
@@ -20,6 +22,16 @@ Library Python yang powerful untuk melakukan pencarian di berbagai mesin pencari
 - **Opsi Export**: Export ke JSON atau format dictionary
 - **Type Hints**: Anotasi tipe lengkap untuk dukungan IDE yang lebih baik
 - **Penanganan Error**: Exception handling yang komprehensif
+
+## Prasyarat
+
+- **Python 3.9** atau lebih baru
+- **pip** (biasanya sudah terinstall dengan Python)
+
+Cek versi Python:
+```bash
+python --version  # Harus 3.9+
+```
 
 ## Instalasi
 
@@ -230,6 +242,44 @@ engines = get_available_engines()
 print(engines)  # ['google', 'bing', 'duckduckgo', 'yahoo', 'mojeek', 'brave']
 ```
 
+### Kunjungi URL Hasil Pencarian
+
+Fitur baru untuk mengambil konten dari URL yang ditemukan:
+
+```python
+from multi_search_engine import quick_search, visit_url
+
+# Cara 1: Dari hasil pencarian
+results = quick_search("Python tutorial")
+page = results[0].visit()  # Kunjungi URL pertama
+
+print(f"Judul: {page.title}")
+print(f"Konten: {page.text[:500]}")  # 500 karakter pertama
+
+# Cara 2: Langsung dengan URL
+page = visit_url("https://python.org")
+print(f"Title: {page.title}")
+print(f"Status: {page.status_code}")
+
+# Cek error
+if not page.success:
+    print(f"Error: {page.error}")
+
+# Preview teks dengan panjang tertentu
+print(page.get_text_preview(200))  # 200 karakter
+```
+
+**Properti PageContent:**
+| Properti | Tipe | Deskripsi |
+|----------|------|-----------|
+| `url` | str | URL halaman |
+| `title` | str | Judul halaman |
+| `text` | str | Teks bersih (tanpa HTML) |
+| `html` | str | HTML mentah |
+| `status_code` | int | HTTP status code |
+| `success` | bool | True jika berhasil |
+| `error` | str | Pesan error (jika gagal) |
+
 ### Penanganan Error
 
 ```python
@@ -316,6 +366,42 @@ multi-search-engine/
 ├── CHANGELOG.md
 └── CONTRIBUTING.md
 ```
+
+## Contoh Output
+
+```python
+>>> from multi_search_engine import quick_search
+>>> results = quick_search("Python", num_results=2)
+>>> results[0].title
+'Welcome to Python.org'
+>>> results[0].url
+'https://www.python.org/'
+>>> results[0].description
+'The official home of the Python Programming Language...'
+
+>>> # Visit halaman
+>>> page = results[0].visit()
+>>> page.success
+True
+>>> page.title
+'Welcome to Python.org'
+```
+
+## Troubleshooting
+
+| Masalah | Penyebab | Solusi |
+|---------|----------|--------|
+| `ModuleNotFoundError: No module named 'multi_search_engine'` | Library belum diinstall | Jalankan `pip install multi-search-engine` |
+| `NetworkException: Connection error` | Tidak ada koneksi internet | Cek koneksi internet Anda |
+| `BlockedException: Captcha detected` | IP diblokir search engine | Gunakan proxy atau ScraperAPI |
+| Hasil kosong dari Google | Google memblokir request | Gunakan `scraper_api_key` parameter |
+| `TimeoutError` | Server terlalu lambat | Tambah parameter `timeout=60` |
+| `ParseException` | Format HTML berubah | Update library ke versi terbaru |
+
+**Tips:**
+- Mulai dengan DuckDuckGo atau Brave (tidak perlu proxy)
+- Gunakan caching untuk mengurangi request
+- Tambahkan delay antar pencarian untuk menghindari rate limit
 
 ## Kontribusi
 

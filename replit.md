@@ -34,6 +34,8 @@ multi-search-engine/
 - `quick_search()` - Pencarian cepat dalam 1 baris
 - `search_all_engines()` - Pencarian di multiple engines dengan error tracking
 - `get_available_engines()` - Daftar engine yang tersedia
+- `visit_url()` - Kunjungi URL dan ambil konten halaman
+- `SearchResult.visit()` - Method untuk visit URL dari hasil pencarian
 - Context manager support untuk semua engine classes
 
 ## Supported Search Engines

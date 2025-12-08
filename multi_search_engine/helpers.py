@@ -203,3 +203,69 @@ def get_available_engines() -> List[str]:
         ['google', 'bing', 'duckduckgo', 'yahoo', 'mojeek', 'brave']
     """
     return list(ENGINES.keys())
+
+
+def visit_url(
+    url: str,
+    timeout: int = 30,
+    user_agent: Optional[str] = None
+):
+    """
+    Kunjungi URL dan ambil konten halaman.
+    
+    Args:
+        url: URL yang akan dikunjungi
+        timeout: Timeout dalam detik (default: 30)
+        user_agent: Custom user agent (opsional)
+        
+    Returns:
+        PageContent: Object berisi konten halaman
+        
+    Contoh:
+        >>> page = visit_url("https://python.org")
+        >>> print(page.title)
+        >>> print(page.text[:500])
+        
+        >>> # Dengan timeout custom
+        >>> page = visit_url("https://example.com", timeout=10)
+    """
+    from .base import PageContent
+    import requests
+    from bs4 import BeautifulSoup
+    
+    default_ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    headers = {
+        "User-Agent": user_agent or default_ua,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=timeout)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        title = soup.title.string if soup.title else ""
+        
+        for tag in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+            tag.decompose()
+        
+        text = ' '.join(soup.get_text(separator=' ').split())
+        
+        return PageContent(
+            url=url,
+            title=title,
+            text=text,
+            html=response.text,
+            status_code=response.status_code,
+            success=True
+        )
+    except requests.exceptions.Timeout:
+        return PageContent(
+            url=url, title="", text="", html="",
+            status_code=0, success=False, error=f"Timeout setelah {timeout}s"
+        )
+    except requests.exceptions.RequestException as e:
+        return PageContent(
+            url=url, title="", text="", html="",
+            status_code=0, success=False, error=str(e)
+        )

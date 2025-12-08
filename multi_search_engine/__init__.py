@@ -11,7 +11,7 @@ from .engines.duckduckgo import DuckDuckGoSearch
 from .engines.yahoo import YahooSearch
 from .engines.mojeek import MojeekSearch
 from .engines.brave import BraveSearch
-from .base import SearchEngine, SearchResult
+from .base import SearchEngine, SearchResult, PageContent
 from .cache import FileCache, MemoryCache, CacheInterface
 from .rate_limiter import RateLimiter
 from .exceptions import (
@@ -21,7 +21,7 @@ from .exceptions import (
     RateLimitException,
     BlockedException
 )
-from .helpers import quick_search, search_all_engines, get_available_engines, SearchAllResult
+from .helpers import quick_search, search_all_engines, get_available_engines, SearchAllResult, visit_url
 
 __version__ = "1.1.0"
 __author__ = "developerxnoxs"
@@ -47,5 +47,7 @@ __all__ = [
     "quick_search",
     "search_all_engines",
     "get_available_engines",
-    "SearchAllResult"
+    "SearchAllResult",
+    "visit_url",
+    "PageContent"
 ]
