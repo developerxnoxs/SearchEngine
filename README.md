@@ -7,107 +7,107 @@
 [![codecov](https://codecov.io/gh/yourusername/multi-search-engine/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/multi-search-engine)
 [![Downloads](https://pepy.tech/badge/multi-search-engine)](https://pepy.tech/project/multi-search-engine)
 
-A powerful Python library for searching across multiple search engines with a unified interface. Supports Google, Bing, DuckDuckGo, Yahoo, Mojeek, and Brave with built-in caching, rate limiting, and proxy support.
+Library Python yang powerful untuk melakukan pencarian di berbagai mesin pencari dengan interface yang seragam. Mendukung Google, Bing, DuckDuckGo, Yahoo, Mojeek, dan Brave dengan fitur caching, rate limiting, dan dukungan proxy.
 
-## Features
+## Fitur
 
-- **6 Search Engines**: Google, Bing, DuckDuckGo, Yahoo, Mojeek, Brave
-- **Unified Interface**: Same API for all search engines
-- **Caching**: File-based and memory-based caching
-- **Rate Limiting**: Built-in rate limiter with exponential backoff
-- **Proxy Support**: Works with custom proxies and ScraperAPI
-- **Result Filtering**: Filter by keyword, domain, or limit count
-- **Export Options**: Export to JSON or dictionary format
-- **Type Hints**: Full type annotations for better IDE support
-- **Error Handling**: Comprehensive exception handling
+- **6 Mesin Pencari**: Google, Bing, DuckDuckGo, Yahoo, Mojeek, Brave
+- **Interface Seragam**: API yang sama untuk semua mesin pencari
+- **Caching**: Cache berbasis file dan memory
+- **Rate Limiting**: Rate limiter bawaan dengan exponential backoff
+- **Dukungan Proxy**: Bekerja dengan proxy kustom dan ScraperAPI
+- **Filter Hasil**: Filter berdasarkan kata kunci, domain, atau batasi jumlah
+- **Opsi Export**: Export ke JSON atau format dictionary
+- **Type Hints**: Anotasi tipe lengkap untuk dukungan IDE yang lebih baik
+- **Penanganan Error**: Exception handling yang komprehensif
 
-## Installation
+## Instalasi
 
 ```bash
 pip install multi-search-engine
 ```
 
-## Quick Start
+## Memulai Cepat
 
 ```python
 from multi_search_engine import DuckDuckGoSearch
 
-# Create search engine instance
+# Buat instance search engine
 ddg = DuckDuckGoSearch()
 
-# Perform search
+# Lakukan pencarian
 results = ddg.search("Python programming", num_results=10)
 
-# Process results
+# Proses hasil
 for result in results:
-    print(f"Title: {result.title}")
+    print(f"Judul: {result.title}")
     print(f"URL: {result.url}")
-    print(f"Description: {result.description}")
+    print(f"Deskripsi: {result.description}")
     print()
 ```
 
-## Supported Search Engines
+## Mesin Pencari yang Didukung
 
-| Engine | Class | No Proxy | With ScraperAPI | Recommendation |
-|--------|-------|----------|-----------------|----------------|
-| DuckDuckGo | `DuckDuckGoSearch` | Stable | Stable | Direct (no proxy needed) |
-| Yahoo | `YahooSearch` | Stable | Stable | Direct (no proxy needed) |
-| Mojeek | `MojeekSearch` | Stable | Stable | Direct (no proxy needed) |
-| Brave | `BraveSearch` | Stable | Stable | Direct (no proxy needed) |
-| Bing | `BingSearch` | May require captcha | OK | Use ScraperAPI |
-| Google | `GoogleSearch` | Blocked | OK | ScraperAPI required |
+| Engine | Class | Tanpa Proxy | Dengan ScraperAPI | Rekomendasi |
+|--------|-------|-------------|-------------------|-------------|
+| DuckDuckGo | `DuckDuckGoSearch` | Stabil | Stabil | Langsung (tanpa proxy) |
+| Yahoo | `YahooSearch` | Stabil | Stabil | Langsung (tanpa proxy) |
+| Mojeek | `MojeekSearch` | Stabil | Stabil | Langsung (tanpa proxy) |
+| Brave | `BraveSearch` | Stabil | Stabil | Langsung (tanpa proxy) |
+| Bing | `BingSearch` | Mungkin perlu captcha | OK | Gunakan ScraperAPI |
+| Google | `GoogleSearch` | Diblokir | OK | ScraperAPI diperlukan |
 
-> **Note:** Google and Bing actively block automated requests. Use ScraperAPI for reliable results.
+> **Catatan:** Google dan Bing aktif memblokir permintaan otomatis. Gunakan ScraperAPI untuk hasil yang andal.
 
-## Usage Examples
+## Contoh Penggunaan
 
-### Basic Search
+### Pencarian Dasar
 
 ```python
 from multi_search_engine import DuckDuckGoSearch, BingSearch, GoogleSearch
 
-# DuckDuckGo (no proxy needed)
+# DuckDuckGo (tanpa proxy)
 ddg = DuckDuckGoSearch()
 results = ddg.search("Python programming", num_results=10)
 
-# With search parameters
+# Dengan parameter pencarian
 results = ddg.search(
     query="machine learning",
     page=1,
     num_results=10,
-    language="en",
-    country="US",
+    language="id",
+    country="ID",
     safe_search=True
 )
 ```
 
-### Using ScraperAPI (for Google/Bing)
+### Menggunakan ScraperAPI (untuk Google/Bing)
 
 ```python
 from multi_search_engine import GoogleSearch
 
-google = GoogleSearch(scraper_api_key="YOUR_API_KEY")
+google = GoogleSearch(scraper_api_key="API_KEY_ANDA")
 results = google.search("Python programming")
 
 for result in results:
     print(f"{result.title}: {result.url}")
 ```
 
-### Caching Results
+### Caching Hasil
 
 ```python
 from multi_search_engine import DuckDuckGoSearch, FileCache, MemoryCache
 
-# File-based cache (persistent)
+# Cache berbasis file (persisten)
 file_cache = FileCache(cache_dir=".search_cache", default_ttl=3600)
 ddg = DuckDuckGoSearch(cache=file_cache)
 
-# Memory cache (session-only)
+# Cache memory (hanya sesi)
 mem_cache = MemoryCache(default_ttl=600)
 ddg = DuckDuckGoSearch(cache=mem_cache)
 
-# Results are automatically cached
-results = ddg.search("Python tutorial")
+# Hasil otomatis di-cache
+results = ddg.search("Tutorial Python")
 ```
 
 ### Rate Limiting
@@ -125,34 +125,34 @@ bing = BingSearch(rate_limiter=limiter)
 results = bing.search("web development")
 ```
 
-### Using Custom Proxy
+### Menggunakan Proxy Kustom
 
 ```python
 from multi_search_engine import YahooSearch
 
 yahoo = YahooSearch(proxy="http://proxy.example.com:8080")
-results = yahoo.search("technology news")
+results = yahoo.search("berita teknologi")
 ```
 
-### Filtering Results
+### Filter Hasil
 
 ```python
 from multi_search_engine import BraveSearch
 
 brave = BraveSearch()
-results = brave.search("programming tutorials", num_results=20)
+results = brave.search("tutorial programming", num_results=20)
 
-# Filter by keyword
+# Filter berdasarkan kata kunci
 python_results = brave.filter_by_keyword("python")
 
-# Filter by domain
+# Filter berdasarkan domain
 github_results = brave.filter_by_domain("github.com")
 
-# Limit results
+# Batasi hasil
 top_5 = brave.limit_results(5)
 ```
 
-### Export Results
+### Export Hasil
 
 ```python
 from multi_search_engine import DuckDuckGoSearch
@@ -160,18 +160,18 @@ from multi_search_engine import DuckDuckGoSearch
 ddg = DuckDuckGoSearch()
 results = ddg.search("data science")
 
-# Export to list of dictionaries
+# Export ke list of dictionaries
 data = ddg.to_dict_list()
 
-# Export to JSON string
+# Export ke JSON string
 json_str = ddg.to_json(indent=2)
 
-# Save to file
+# Simpan ke file
 with open("results.json", "w") as f:
     f.write(ddg.to_json())
 ```
 
-### Error Handling
+### Penanganan Error
 
 ```python
 from multi_search_engine import (
@@ -186,58 +186,58 @@ ddg = DuckDuckGoSearch()
 try:
     results = ddg.search("query")
 except NetworkException as e:
-    print(f"Network error: {e}")
+    print(f"Error jaringan: {e}")
 except ParseException as e:
-    print(f"Failed to parse results: {e}")
+    print(f"Gagal parsing hasil: {e}")
 except BlockedException as e:
-    print(f"Blocked by search engine: {e}")
+    print(f"Diblokir oleh mesin pencari: {e}")
 ```
 
-## API Reference
+## Referensi API
 
-### SearchEngine Parameters
+### Parameter SearchEngine
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `user_agent` | str | Random | Custom user agent string |
-| `proxy` | str | None | Proxy URL |
-| `timeout` | int | 30 | Request timeout in seconds |
-| `delay` | float | 1.0 | Delay between requests |
-| `cache` | CacheInterface | None | Cache instance |
-| `rate_limiter` | RateLimiter | None | Rate limiter instance |
-| `scraper_api_key` | str | None | ScraperAPI API key |
+| Parameter | Tipe | Default | Deskripsi |
+|-----------|------|---------|-----------|
+| `user_agent` | str | Random | String user agent kustom |
+| `proxy` | str | None | URL Proxy |
+| `timeout` | int | 30 | Timeout request dalam detik |
+| `delay` | float | 1.0 | Delay antar request |
+| `cache` | CacheInterface | None | Instance cache |
+| `rate_limiter` | RateLimiter | None | Instance rate limiter |
+| `scraper_api_key` | str | None | API key ScraperAPI |
 
-### Search Method Parameters
+### Parameter Method Search
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `query` | str | Required | Search query |
-| `page` | int | 1 | Page number |
-| `num_results` | int | 10 | Results per page |
-| `language` | str | None | Language code (e.g., 'en', 'id') |
-| `country` | str | None | Country code (e.g., 'US', 'ID') |
-| `safe_search` | bool | True | Enable safe search |
-| `use_cache` | bool | True | Use cached results |
+| Parameter | Tipe | Default | Deskripsi |
+|-----------|------|---------|-----------|
+| `query` | str | Wajib | Query pencarian |
+| `page` | int | 1 | Nomor halaman |
+| `num_results` | int | 10 | Hasil per halaman |
+| `language` | str | None | Kode bahasa (contoh: 'id', 'en') |
+| `country` | str | None | Kode negara (contoh: 'ID', 'US') |
+| `safe_search` | bool | True | Aktifkan safe search |
+| `use_cache` | bool | True | Gunakan hasil cache |
 
-### SearchResult Properties
+### Properti SearchResult
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `title` | str | Result title |
-| `url` | str | Result URL |
-| `description` | str | Result description/snippet |
-| `position` | int | Position in search results |
-| `engine` | str | Search engine name |
-| `extra` | dict | Additional metadata |
+| Properti | Tipe | Deskripsi |
+|----------|------|-----------|
+| `title` | str | Judul hasil |
+| `url` | str | URL hasil |
+| `description` | str | Deskripsi/snippet hasil |
+| `position` | int | Posisi dalam hasil pencarian |
+| `engine` | str | Nama mesin pencari |
+| `extra` | dict | Metadata tambahan |
 
-## Project Structure
+## Struktur Proyek
 
 ```
 multi-search-engine/
 ├── multi_search_engine/
 │   ├── __init__.py
-│   ├── base.py              # Base class and SearchResult
-│   ├── cache.py             # FileCache and MemoryCache
+│   ├── base.py              # Base class dan SearchResult
+│   ├── cache.py             # FileCache dan MemoryCache
 │   ├── rate_limiter.py      # RateLimiter
 │   ├── exceptions.py        # Custom exceptions
 │   └── engines/
@@ -258,24 +258,24 @@ multi-search-engine/
 └── CONTRIBUTING.md
 ```
 
-## Contributing
+## Kontribusi
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and contribute to the project.
+Kontribusi sangat diterima! Silakan baca [Panduan Kontribusi](CONTRIBUTING.md) untuk detail tentang cara mengirim pull request, melaporkan masalah, dan berkontribusi pada proyek.
 
-## Security
+## Keamanan
 
-For security concerns, please read our [Security Policy](SECURITY.md).
+Untuk masalah keamanan, silakan baca [Kebijakan Keamanan](SECURITY.md).
 
-## License
+## Lisensi
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail.
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a list of changes.
+Lihat [CHANGELOG.md](CHANGELOG.md) untuk daftar perubahan.
 
-## Acknowledgments
+## Ucapan Terima Kasih
 
-- Thanks to all contributors
-- Inspired by the need for a unified search interface
-- Built with Python and love
+- Terima kasih kepada semua kontributor
+- Terinspirasi dari kebutuhan akan interface pencarian yang seragam
+- Dibangun dengan Python dan cinta
