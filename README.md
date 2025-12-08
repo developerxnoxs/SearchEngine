@@ -29,6 +29,20 @@ pip install multi-search-engine
 
 ## Memulai Cepat
 
+### Cara Paling Mudah (1 Baris!)
+
+```python
+from multi_search_engine import quick_search
+
+# Pencarian cepat dalam 1 baris
+results = quick_search("Python programming")
+
+# Dengan opsi engine
+results = quick_search("machine learning", engine="brave", num_results=5)
+```
+
+### Cara Standar
+
 ```python
 from multi_search_engine import DuckDuckGoSearch
 
@@ -44,6 +58,18 @@ for result in results:
     print(f"URL: {result.url}")
     print(f"Deskripsi: {result.description}")
     print()
+```
+
+### Dengan Context Manager
+
+```python
+from multi_search_engine import DuckDuckGoSearch, FileCache
+
+# Otomatis cleanup setelah selesai
+with DuckDuckGoSearch(cache=FileCache()) as ddg:
+    results = ddg.search("Python tutorial")
+    for result in results:
+        print(result.title)
 ```
 
 ## Mesin Pencari yang Didukung
@@ -169,6 +195,39 @@ json_str = ddg.to_json(indent=2)
 # Simpan ke file
 with open("results.json", "w") as f:
     f.write(ddg.to_json())
+```
+
+### Pencarian di Semua Engine Sekaligus
+
+```python
+from multi_search_engine import search_all_engines
+
+# Cari di semua engine (DuckDuckGo, Yahoo, Mojeek, Brave)
+result = search_all_engines("Python tutorial")
+
+# Iterasi hasil yang berhasil
+for engine, items in result.items():
+    print(f"{engine}: {len(items)} hasil")
+
+# Cek dan handle error per engine
+if result.has_errors():
+    for engine, error in result.errors.items():
+        print(f"{engine} gagal: {error}")
+
+# Pilih engine tertentu
+result = search_all_engines("AI", engines=["duckduckgo", "brave"])
+
+# Raise exception jika ada error
+result = search_all_engines("AI", raise_on_error=True)
+```
+
+### Lihat Engine yang Tersedia
+
+```python
+from multi_search_engine import get_available_engines
+
+engines = get_available_engines()
+print(engines)  # ['google', 'bing', 'duckduckgo', 'yahoo', 'mojeek', 'brave']
 ```
 
 ### Penanganan Error

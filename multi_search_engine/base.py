@@ -105,6 +105,16 @@ class SearchEngine(ABC):
         self._last_request_time = 0
         self._results: List[SearchResult] = []
         self._raw_html: str = ""
+    
+    def __enter__(self):
+        """Context manager entry - untuk penggunaan dengan 'with' statement"""
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Context manager exit - cleanup jika diperlukan"""
+        self._results = []
+        self._raw_html = ""
+        return False
         
     def _get_headers(self) -> Dict[str, str]:
         """Generate HTTP headers - sama seperti PHP"""

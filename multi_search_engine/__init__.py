@@ -21,8 +21,9 @@ from .exceptions import (
     RateLimitException,
     BlockedException
 )
+from .helpers import quick_search, search_all_engines, get_available_engines, SearchAllResult
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "developerxnoxs"
 
 __all__ = [
@@ -42,5 +43,9 @@ __all__ = [
     "NetworkException",
     "ParseException",
     "RateLimitException",
-    "BlockedException"
+    "BlockedException",
+    "quick_search",
+    "search_all_engines",
+    "get_available_engines",
+    "SearchAllResult"
 ]
