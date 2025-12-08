@@ -164,8 +164,3 @@ Thumbs.db
 # UV
 .uv/
 uv.lock
-
-# Replit
-.replit
-replit.nix
-.config/
