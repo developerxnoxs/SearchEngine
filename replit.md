@@ -30,6 +30,12 @@ multi-search-engine/
 - **Demo**: Run `python main.py` to see the library in action
 - **Tests**: Run `pytest tests/` for unit tests
 
+## Fitur Baru (v1.1.0)
+- `quick_search()` - Pencarian cepat dalam 1 baris
+- `search_all_engines()` - Pencarian di multiple engines dengan error tracking
+- `get_available_engines()` - Daftar engine yang tersedia
+- Context manager support untuk semua engine classes
+
 ## Supported Search Engines
 | Engine | Class | Proxy Required |
 |--------|-------|----------------|
