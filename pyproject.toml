@@ -1,0 +1,108 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "multi-search-engine"
+version = "1.0.0"
+description = "A Python library for searching across multiple search engines (Google, Bing, DuckDuckGo, Yahoo, Mojeek, Brave) with caching, rate limiting, and proxy support"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Multi Search Engine Contributors"}
+]
+maintainers = [
+    {name = "Multi Search Engine Contributors"}
+]
+keywords = [
+    "search",
+    "search-engine",
+    "google",
+    "bing",
+    "duckduckgo",
+    "yahoo",
+    "mojeek",
+    "brave",
+    "web-scraping",
+    "scraper",
+    "scraperapi"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+dependencies = [
+    "beautifulsoup4>=4.12.0",
+    "build>=1.3.0",
+    "requests>=2.28.0",
+    "twine>=6.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "pre-commit>=3.0.0",
+]
+docs = [
+    "pdoc3>=0.10.0",
+    "markdown>=3.4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/multi-search-engine"
+Documentation = "https://github.com/yourusername/multi-search-engine#readme"
+Repository = "https://github.com/yourusername/multi-search-engine.git"
+Issues = "https://github.com/yourusername/multi-search-engine/issues"
+Changelog = "https://github.com/yourusername/multi-search-engine/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/multi_search_engine",
+    "/tests",
+    "/README.md",
+    "/LICENSE",
+    "/CHANGELOG.md",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["multi_search_engine"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 120
+target-version = ["py39", "py310", "py311", "py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.flake8]
+max-line-length = 120
+exclude = [".git", "__pycache__", "build", "dist", ".eggs"]
