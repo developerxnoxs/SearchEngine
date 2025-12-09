@@ -4,18 +4,22 @@ For security research purposes only.
 Only use on websites you own or have written permission to test.
 """
 
+import os
 import re
 import time
 import requests
 from typing import List, Dict, Optional
 from dataclasses import dataclass
-from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse, quote_plus
+from bs4 import BeautifulSoup
 
 try:
-    from SearchEngine import DuckDuckGoSearch, BraveSearch, MojeekSearch
+    from SearchEngine import DuckDuckGoSearch, BraveSearch, MojeekSearch, GoogleSearch
 except ImportError:
     print("Please install xnoxs-engine: pip install xnoxs-engine")
     exit(1)
+
+SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "")
 
 
 @dataclass
@@ -127,13 +131,29 @@ class SQLiScanner:
     def search_urls(self, query: str, engine: str = "auto", num_results: int = 10) -> List[str]:
         """Search for URLs using specified search engine with fallback"""
         urls = []
-        engines_to_try = []
         
-        if engine == "auto":
-            engines_to_try = ["duckduckgo", "brave", "mojeek"]
-        else:
-            engines_to_try = [engine, "duckduckgo", "brave", "mojeek"]
-            engines_to_try = list(dict.fromkeys(engines_to_try))
+        if SCRAPER_API_KEY:
+            print("[*] Using ScraperAPI with Google...")
+            urls = self._search_with_scraperapi(query, num_results)
+            if urls:
+                return urls
+        
+        if SCRAPER_API_KEY:
+            try:
+                print("[*] Trying Google with ScraperAPI...")
+                google = GoogleSearch(scraper_api_key=SCRAPER_API_KEY, delay=self.delay)
+                results = google.search(query, num_results=num_results)
+                for result in results:
+                    url = result.url
+                    if self._has_parameters(url):
+                        urls.append(url)
+                if urls:
+                    print(f"[+] Google returned {len(urls)} URLs with parameters")
+                    return urls
+            except Exception as e:
+                print(f"[!] Google error: {e}")
+        
+        engines_to_try = ["duckduckgo", "brave", "mojeek"]
         
         for eng in engines_to_try:
             try:
@@ -154,17 +174,54 @@ class SQLiScanner:
                     url = result.url
                     if self._has_parameters(url):
                         urls.append(url)
-                    elif "?" not in url and "=" in query:
-                        urls.append(url)
                 
-                if results:
-                    print(f"[+] {eng} returned {len(results)} results")
+                if urls:
+                    print(f"[+] {eng} returned {len(urls)} URLs with parameters")
                     break
+                elif results:
+                    print(f"[*] {eng} returned {len(results)} results but none with parameters")
                     
             except Exception as e:
                 print(f"[!] {eng} error: {e}")
                 time.sleep(self.delay)
                 continue
+            
+        return urls
+    
+    def _search_with_scraperapi(self, query: str, num_results: int = 10) -> List[str]:
+        """Search Google directly via ScraperAPI"""
+        urls = []
+        try:
+            google_url = f"https://www.google.com/search?q={quote_plus(query)}&num={num_results}"
+            
+            api_url = "http://api.scraperapi.com"
+            params = {
+                "api_key": SCRAPER_API_KEY,
+                "url": google_url,
+                "render": "false"
+            }
+            
+            response = requests.get(api_url, params=params, timeout=60)
+            
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, "html.parser")
+                
+                for a in soup.find_all("a", href=True):
+                    href = a["href"]
+                    if href.startswith("/url?q="):
+                        actual_url = href.split("/url?q=")[1].split("&")[0]
+                        if self._has_parameters(actual_url):
+                            urls.append(actual_url)
+                    elif href.startswith("http") and "google.com" not in href:
+                        if self._has_parameters(href):
+                            urls.append(href)
+                
+                print(f"[+] ScraperAPI Google returned {len(urls)} URLs with parameters")
+            else:
+                print(f"[!] ScraperAPI error: {response.status_code}")
+                
+        except Exception as e:
+            print(f"[!] ScraperAPI error: {e}")
             
         return urls
 
