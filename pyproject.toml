@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "multi-search-engine"
+name = "xnoxs-engine"
 version = "1.1.0"
 description = "A Python library for searching across multiple search engines (Google, Bing, DuckDuckGo, Yahoo, Mojeek, Brave) with caching, rate limiting, and proxy support"
 readme = "README.md"

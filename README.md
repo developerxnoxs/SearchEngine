@@ -36,7 +36,7 @@ python --version  # Harus 3.9+
 ## Instalasi
 
 ```bash
-pip install multi-search-engine
+pip install xnoxs-engine
 ```
 
 ## Memulai Cepat
@@ -391,7 +391,7 @@ True
 
 | Masalah | Penyebab | Solusi |
 |---------|----------|--------|
-| `ModuleNotFoundError: No module named 'SearchEngine'` | Library belum diinstall | Jalankan `pip install multi-search-engine` |
+| `ModuleNotFoundError: No module named 'SearchEngine'` | Library belum diinstall | Jalankan `pip install xnoxs-engine` |
 | `NetworkException: Connection error` | Tidak ada koneksi internet | Cek koneksi internet Anda |
 | `BlockedException: Captcha detected` | IP diblokir search engine | Gunakan proxy atau ScraperAPI |
 | Hasil kosong dari Google | Google memblokir request | Gunakan `scraper_api_key` parameter |
