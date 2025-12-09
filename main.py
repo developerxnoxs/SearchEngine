@@ -3,7 +3,7 @@ Demo script untuk Multi Search Engine Library
 """
 
 import time
-from multi_search_engine import (
+from SearchEngine import (
     DuckDuckGoSearch,
     MojeekSearch,
     BraveSearch,

@@ -75,7 +75,7 @@ Changelog = "https://github.com/developerxnoxs/SearchEngine/blob/main/CHANGELOG.
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "/multi_search_engine",
+    "/SearchEngine",
     "/tests",
     "/README.md",
     "/LICENSE",
@@ -83,7 +83,7 @@ include = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["multi_search_engine"]
+packages = ["SearchEngine"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
