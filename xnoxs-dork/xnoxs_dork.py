@@ -124,28 +124,47 @@ class SQLiScanner:
         self.session.headers.update({"User-Agent": self.user_agent})
         self.results: List[VulnResult] = []
 
-    def search_urls(self, query: str, engine: str = "duckduckgo", num_results: int = 10) -> List[str]:
-        """Search for URLs using specified search engine"""
+    def search_urls(self, query: str, engine: str = "auto", num_results: int = 10) -> List[str]:
+        """Search for URLs using specified search engine with fallback"""
         urls = []
+        engines_to_try = []
         
-        try:
-            if engine == "duckduckgo":
-                searcher = DuckDuckGoSearch(delay=self.delay)
-            elif engine == "brave":
-                searcher = BraveSearch(delay=self.delay)
-            elif engine == "mojeek":
-                searcher = MojeekSearch(delay=self.delay)
-            else:
-                searcher = DuckDuckGoSearch(delay=self.delay)
+        if engine == "auto":
+            engines_to_try = ["duckduckgo", "brave", "mojeek"]
+        else:
+            engines_to_try = [engine, "duckduckgo", "brave", "mojeek"]
+            engines_to_try = list(dict.fromkeys(engines_to_try))
+        
+        for eng in engines_to_try:
+            try:
+                print(f"[*] Trying {eng}...")
+                
+                if eng == "duckduckgo":
+                    searcher = DuckDuckGoSearch(delay=self.delay)
+                elif eng == "brave":
+                    searcher = BraveSearch(delay=self.delay)
+                elif eng == "mojeek":
+                    searcher = MojeekSearch(delay=self.delay)
+                else:
+                    continue
 
-            results = searcher.search(query, num_results=num_results)
-            
-            for result in results:
-                if self._has_parameters(result.url):
-                    urls.append(result.url)
+                results = searcher.search(query, num_results=num_results)
+                
+                for result in results:
+                    url = result.url
+                    if self._has_parameters(url):
+                        urls.append(url)
+                    elif "?" not in url and "=" in query:
+                        urls.append(url)
+                
+                if results:
+                    print(f"[+] {eng} returned {len(results)} results")
+                    break
                     
-        except Exception as e:
-            print(f"[!] Search error: {e}")
+            except Exception as e:
+                print(f"[!] {eng} error: {e}")
+                time.sleep(self.delay)
+                continue
             
         return urls
 
@@ -245,7 +264,7 @@ class SQLiScanner:
                 
         return results
 
-    def scan_dork(self, dork: str, engine: str = "duckduckgo", num_results: int = 10) -> List[VulnResult]:
+    def scan_dork(self, dork: str, engine: str = "auto", num_results: int = 10) -> List[VulnResult]:
         """Scan URLs found using a Google dork"""
         print(f"\n[*] Searching with dork: {dork}")
         
@@ -262,7 +281,7 @@ class SQLiScanner:
             
         return all_results
 
-    def scan_domain(self, domain: str, engine: str = "duckduckgo") -> List[VulnResult]:
+    def scan_domain(self, domain: str, engine: str = "auto") -> List[VulnResult]:
         """Scan a specific domain for SQL injection vulnerabilities"""
         print(f"\n[*] Scanning domain: {domain}")
         
