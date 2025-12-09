@@ -44,7 +44,7 @@ pip install multi-search-engine
 ### Cara Paling Mudah (1 Baris!)
 
 ```python
-from multi_search_engine import quick_search
+from SearchEngine import quick_search
 
 # Pencarian cepat dalam 1 baris
 results = quick_search("Python programming")
@@ -56,7 +56,7 @@ results = quick_search("machine learning", engine="brave", num_results=5)
 ### Cara Standar
 
 ```python
-from multi_search_engine import DuckDuckGoSearch
+from SearchEngine import DuckDuckGoSearch
 
 # Buat instance search engine
 ddg = DuckDuckGoSearch()
@@ -75,7 +75,7 @@ for result in results:
 ### Dengan Context Manager
 
 ```python
-from multi_search_engine import DuckDuckGoSearch, FileCache
+from SearchEngine import DuckDuckGoSearch, FileCache
 
 # Otomatis cleanup setelah selesai
 with DuckDuckGoSearch(cache=FileCache()) as ddg:
@@ -102,7 +102,7 @@ with DuckDuckGoSearch(cache=FileCache()) as ddg:
 ### Pencarian Dasar
 
 ```python
-from multi_search_engine import DuckDuckGoSearch, BingSearch, GoogleSearch
+from SearchEngine import DuckDuckGoSearch, BingSearch, GoogleSearch
 
 # DuckDuckGo (tanpa proxy)
 ddg = DuckDuckGoSearch()
@@ -122,7 +122,7 @@ results = ddg.search(
 ### Menggunakan ScraperAPI (untuk Google/Bing)
 
 ```python
-from multi_search_engine import GoogleSearch
+from SearchEngine import GoogleSearch
 
 google = GoogleSearch(scraper_api_key="API_KEY_ANDA")
 results = google.search("Python programming")
@@ -134,7 +134,7 @@ for result in results:
 ### Caching Hasil
 
 ```python
-from multi_search_engine import DuckDuckGoSearch, FileCache, MemoryCache
+from SearchEngine import DuckDuckGoSearch, FileCache, MemoryCache
 
 # Cache berbasis file (persisten)
 file_cache = FileCache(cache_dir=".search_cache", default_ttl=3600)
@@ -151,7 +151,7 @@ results = ddg.search("Tutorial Python")
 ### Rate Limiting
 
 ```python
-from multi_search_engine import BingSearch, RateLimiter
+from SearchEngine import BingSearch, RateLimiter
 
 limiter = RateLimiter(
     requests_per_minute=10,
@@ -166,7 +166,7 @@ results = bing.search("web development")
 ### Menggunakan Proxy Kustom
 
 ```python
-from multi_search_engine import YahooSearch
+from SearchEngine import YahooSearch
 
 yahoo = YahooSearch(proxy="http://proxy.example.com:8080")
 results = yahoo.search("berita teknologi")
@@ -175,7 +175,7 @@ results = yahoo.search("berita teknologi")
 ### Filter Hasil
 
 ```python
-from multi_search_engine import BraveSearch
+from SearchEngine import BraveSearch
 
 brave = BraveSearch()
 results = brave.search("tutorial programming", num_results=20)
@@ -193,7 +193,7 @@ top_5 = brave.limit_results(5)
 ### Export Hasil
 
 ```python
-from multi_search_engine import DuckDuckGoSearch
+from SearchEngine import DuckDuckGoSearch
 
 ddg = DuckDuckGoSearch()
 results = ddg.search("data science")
@@ -212,7 +212,7 @@ with open("results.json", "w") as f:
 ### Pencarian di Semua Engine Sekaligus
 
 ```python
-from multi_search_engine import search_all_engines
+from SearchEngine import search_all_engines
 
 # Cari di semua engine (DuckDuckGo, Yahoo, Mojeek, Brave)
 result = search_all_engines("Python tutorial")
@@ -236,7 +236,7 @@ result = search_all_engines("AI", raise_on_error=True)
 ### Lihat Engine yang Tersedia
 
 ```python
-from multi_search_engine import get_available_engines
+from SearchEngine import get_available_engines
 
 engines = get_available_engines()
 print(engines)  # ['google', 'bing', 'duckduckgo', 'yahoo', 'mojeek', 'brave']
@@ -247,7 +247,7 @@ print(engines)  # ['google', 'bing', 'duckduckgo', 'yahoo', 'mojeek', 'brave']
 Fitur baru untuk mengambil konten dari URL yang ditemukan:
 
 ```python
-from multi_search_engine import quick_search, visit_url
+from SearchEngine import quick_search, visit_url
 
 # Cara 1: Dari hasil pencarian
 results = quick_search("Python tutorial")
@@ -283,7 +283,7 @@ print(page.get_text_preview(200))  # 200 karakter
 ### Penanganan Error
 
 ```python
-from multi_search_engine import (
+from SearchEngine import (
     DuckDuckGoSearch,
     NetworkException,
     ParseException,
@@ -342,8 +342,8 @@ except BlockedException as e:
 ## Struktur Proyek
 
 ```
-multi-search-engine/
-├── multi_search_engine/
+SearchEngine/
+├── SearchEngine/
 │   ├── __init__.py
 │   ├── base.py              # Base class dan SearchResult
 │   ├── cache.py             # FileCache dan MemoryCache
@@ -370,7 +370,7 @@ multi-search-engine/
 ## Contoh Output
 
 ```python
->>> from multi_search_engine import quick_search
+>>> from SearchEngine import quick_search
 >>> results = quick_search("Python", num_results=2)
 >>> results[0].title
 'Welcome to Python.org'
@@ -391,7 +391,7 @@ True
 
 | Masalah | Penyebab | Solusi |
 |---------|----------|--------|
-| `ModuleNotFoundError: No module named 'multi_search_engine'` | Library belum diinstall | Jalankan `pip install multi-search-engine` |
+| `ModuleNotFoundError: No module named 'SearchEngine'` | Library belum diinstall | Jalankan `pip install multi-search-engine` |
 | `NetworkException: Connection error` | Tidak ada koneksi internet | Cek koneksi internet Anda |
 | `BlockedException: Captcha detected` | IP diblokir search engine | Gunakan proxy atau ScraperAPI |
 | Hasil kosong dari Google | Google memblokir request | Gunakan `scraper_api_key` parameter |
