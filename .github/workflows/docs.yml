@@ -41,7 +41,7 @@ jobs:
         pdoc --html --output-dir docs/api multi_search_engine --force
 
     - name: Setup Pages
-      uses: actions/configure-pages@v4
+      uses: actions/configure-pages@v5
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
